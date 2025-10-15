@@ -1,27 +1,52 @@
 class MyDuration {
-  
+  final int _milliseconds;
 
-//   // Display the duration in a readable format
-//   @override
-//   String toString() {
-//     int seconds = (_milliseconds / 1000).round();
-//     int minutes = (seconds / 60).floor();
-//     seconds = seconds % 60;
-//     int hours = (minutes / 60).floor();
-//     minutes = minutes % 60;
-//     return '$hours hours, $minutes minutes, $seconds seconds';
-//   }
-// }
+  MyDuration(int milliseconds)
+      : assert(milliseconds >= 0, 'Milliseconds cannot be negative'),
+        _milliseconds = milliseconds;
 
-// void main() {
-//   MyDuration duration1 = MyDuration.fromHours(3); // 3 hours
-//   MyDuration duration2 = MyDuration.fromMinutes(45); // 45 minutes
-//   print(duration1 + duration2); // 3 hours, 45 minutes, 0 seconds
-//   print(duration1>duration2); //true
+  //getter
+  int get milliseconds => _milliseconds;
 
-//   try {
-//     print(duration2 - duration1); // This will throw an exception
-//   } catch (e) {
-//     print(e); 
-//   }
+  //constructor
+  MyDuration.fromHours(int hours): this(hours * 3600000);
+  MyDuration.fromMinutes(int minutes): this(minutes * 60000);
+  MyDuration.fromSeconds(int seconds): this(seconds * 1000);
+
+  //overload operation
+  MyDuration operator +(MyDuration other) {
+    return MyDuration(_milliseconds + other._milliseconds);
+  } 
+  MyDuration operator -(MyDuration other) {
+    final endNum = _milliseconds - other._milliseconds;
+    if (endNum < 0) {
+      throw Exception('Result duration cannot be nagative');
+    }
+    return MyDuration(_milliseconds - other._milliseconds);
+  } 
+  bool operator >(MyDuration other) => (_milliseconds > other._milliseconds);
+
+  // Display the duration in a readable format
+  @override
+  String toString() {
+    int seconds = (_milliseconds / 1000).round();
+    int minutes = (seconds / 60).floor();
+    seconds = seconds % 60;
+    int hours = (minutes / 60).floor();
+    minutes = minutes % 60;
+    return '$hours hours, $minutes minutes, $seconds seconds';
+  }
+}
+
+void main() {
+  MyDuration duration1 = MyDuration.fromHours(3); // 3 hours
+  MyDuration duration2 = MyDuration.fromMinutes(45); // 45 minutes
+  print(duration1 + duration2); // 3 hours, 45 minutes, 0 seconds
+  print(duration1>duration2); //true
+
+  try {
+    print(duration2 - duration1); // This will throw an exception
+  } catch (e) {
+    print(e); 
+  }
 }
